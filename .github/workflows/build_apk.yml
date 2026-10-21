@@ -18,25 +18,28 @@ jobs:
           distribution: 'microsoft'
           java-version: '17'
           
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK Platforms (14 to 16)
+      - name: Setup Android SDK & Flutter (Android 14 to 16)
         run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platforms;android-34" "platforms;android-35" "platforms;android-36" "build-tools;36.0.0" "platform-tools"
-
-      - name: Install Flutter via Git
-        run: |
+          # Clonar Flutter
           git clone https://github.com/flutter/flutter.git -b stable --depth 1 _flutter
           echo "$GITHUB_WORKSPACE/_flutter/bin" >> $GITHUB_PATH
-          ./_flutter/bin/flutter --version
+          
+          # Configurar el SDK de Android nativo del runner de Ubuntu
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+          
+          echo "Instalando plataformas y herramientas para Android 14, 15 y 16..."
+          yes | sdkmanager --licenses || true
+          sdkmanager "platforms;android-34" "platforms;android-35" "platforms;android-36" "build-tools;36.0.0" "platform-tools"
+          
+          flutter config --android-sdk $ANDROID_HOME
+          flutter --version
           
       - name: Install Dependencies
-        run: ./_flutter/bin/flutter pub get
+        run: flutter pub get
         
       - name: Build Debug APK
-        run: ./_flutter/bin/flutter build apk --debug --verbose
+        run: flutter build apk --debug --verbose
         
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
