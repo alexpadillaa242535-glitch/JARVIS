@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="jarvis_accessibility_desc">JARVIS puede leer la pantalla y tocar botones solo cuando se lo pides por voz o texto.</string>
+</resources>
