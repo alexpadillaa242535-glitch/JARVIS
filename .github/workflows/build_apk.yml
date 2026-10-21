@@ -18,7 +18,7 @@ jobs:
           distribution: 'microsoft'
           java-version: '17'
           
-      - name: Install Flutter & Android SDK 36
+      - name: Install Flutter & Android SDK (14 to 16)
         run: |
           git clone https://github.com/flutter/flutter.git -b stable --depth 1 _flutter
           echo "$GITHUB_WORKSPACE/_flutter/bin" >> $GITHUB_PATH
@@ -26,8 +26,8 @@ jobs:
           export ANDROID_HOME=/usr/local/lib/android/sdk
           export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
           
-          echo "Instalando SDK de Android 36 y herramientas de compilación..."
-          sdkmanager --install "platforms;android-36" "build-tools;36.0.0" "platform-tools"
+          echo "Instalando SDKs de Android 14 (34), 15 (35) y 16 (36)..."
+          sdkmanager --install "platforms;android-34" "platforms;android-35" "platforms;android-36" "build-tools;36.0.0" "platform-tools"
           
           yes | sdkmanager --licenses || true
           flutter config --android-sdk $ANDROID_HOME
